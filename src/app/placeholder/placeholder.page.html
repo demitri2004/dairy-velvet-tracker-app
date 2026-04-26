@@ -1,0 +1,219 @@
+<div class="page-content">
+  <div class="content-wrap">
+    <section class="hero-copy">
+      <p class="eyebrow">Production Inputs</p>
+      <h1>Track each batch as you make it.</h1>
+      <p class="supporting">
+        Enter the ingredient amounts for this production run. Later we can replace manual entry
+        with camera capture for labels and packaging.
+      </p>
+      <p class="supporting" *ngIf="latestSavedBatchNumber">
+        Last saved batch in Drive: <strong>{{ latestSavedBatchNumber }}</strong>
+      </p>
+    </section>
+
+    <ion-card>
+      <ion-card-content>
+        <div class="form-grid">
+          <div class="field">
+            <label class="field-label" for="batch-dv-number">DV Batch #</label>
+            <input
+              id="batch-dv-number"
+              name="dvBatchNumber"
+              class="field-control"
+              type="text"
+              placeholder="Batch identifier"
+              [(ngModel)]="form.dvBatchNumber"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-cheese">Cheese</label>
+            <input
+              id="batch-cheese"
+              name="cheese"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.cheese"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-butter">Butter</label>
+            <input
+              id="batch-butter"
+              name="butter"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.butter"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-sugar">Sugar</label>
+            <input
+              id="batch-sugar"
+              name="sugar"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.sugar"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-vanilla">Vanilla</label>
+            <input
+              id="batch-vanilla"
+              name="vanilla"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.vanilla"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-cocoa-powder">Cocoa Powder</label>
+            <input
+              id="batch-cocoa-powder"
+              name="cocoaPowder"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.cocoaPowder"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-coating-compound-chocolate"
+              >Coating Compound Chocolate</label
+            >
+            <input
+              id="batch-coating-compound-chocolate"
+              name="coatingCompoundChocolate"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.coatingCompoundChocolate"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-coconut-oil">Coconut Oil</label>
+            <input
+              id="batch-coconut-oil"
+              name="coconutOil"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.coconutOil"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-milk">Milk</label>
+            <input
+              id="batch-milk"
+              name="milk"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.milk"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-lecithin">Lecithin</label>
+            <input
+              id="batch-lecithin"
+              name="lecithin"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.lecithin"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-salt">Salt</label>
+            <input
+              id="batch-salt"
+              name="salt"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.salt"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-other">Other</label>
+            <input
+              id="batch-other"
+              name="other"
+              class="field-control"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="0"
+              [(ngModel)]="form.other"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="batch-note">Note</label>
+            <textarea
+              id="batch-note"
+              name="note"
+              class="field-control field-control-textarea"
+              rows="4"
+              placeholder="Optional batch note"
+              [(ngModel)]="form.note"
+              [disabled]="isSubmitting"
+            ></textarea>
+          </div>
+        </div>
+
+        <ion-button expand="block" size="large" [disabled]="isSubmitting" (click)="submit()">
+          <ion-spinner slot="start" *ngIf="isSubmitting"></ion-spinner>
+          {{ isSubmitting ? 'Submitting...' : 'Submit Batch Entry' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</div>

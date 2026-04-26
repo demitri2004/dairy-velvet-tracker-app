@@ -1,0 +1,131 @@
+<div class="page-content">
+  <div class="content-wrap">
+    <section class="hero-copy">
+      <p class="eyebrow">Markets and Events</p>
+      <h1>Capture each sales day while it’s fresh.</h1>
+      <p class="supporting">
+        Log event totals, split cash and card when you have them, and push the numbers straight to
+        your Google Sheet.
+      </p>
+    </section>
+
+    <ion-card>
+      <ion-card-content>
+        <div class="form-grid">
+          <div class="field">
+            <label class="field-label" for="sales-entry-date">Event Date</label>
+            <div class="date-control-wrap">
+              <ion-datetime-button datetime="sales-entry-date-picker"></ion-datetime-button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sales-entry-name">Event Name</label>
+            <select
+              id="sales-entry-name"
+              name="eventName"
+              class="field-control"
+              [(ngModel)]="form.eventName"
+              [disabled]="isSubmitting"
+            >
+              <option *ngFor="let eventName of eventNames" [value]="eventName">{{ eventName }}</option>
+            </select>
+          </div>
+
+          <div class="field" *ngIf="isOtherSelected">
+            <label class="field-label" for="sales-entry-name-other">Custom Event Name</label>
+            <input
+              id="sales-entry-name-other"
+              name="eventNameOther"
+              class="field-control"
+              type="text"
+              placeholder="Describe the event"
+              [(ngModel)]="form.eventNameOther"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sales-entry-total">Total Sales</label>
+            <input
+              id="sales-entry-total"
+              name="totalSales"
+              class="field-control"
+              type="number"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="0.00"
+              [(ngModel)]="form.totalSales"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sales-entry-cash">Cash Sales</label>
+            <input
+              id="sales-entry-cash"
+              name="cashSales"
+              class="field-control"
+              type="number"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="Optional"
+              [(ngModel)]="form.cashSales"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sales-entry-card">Card Sales</label>
+            <input
+              id="sales-entry-card"
+              name="cardSales"
+              class="field-control"
+              type="number"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="Optional"
+              [(ngModel)]="form.cardSales"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sales-entry-note">Note</label>
+            <textarea
+              id="sales-entry-note"
+              name="note"
+              class="field-control field-control-textarea"
+              rows="4"
+              placeholder="Optional weather, traffic, or product notes"
+              [(ngModel)]="form.note"
+              [disabled]="isSubmitting"
+            ></textarea>
+          </div>
+        </div>
+
+        <ion-button expand="block" size="large" [disabled]="isSubmitting" (click)="submit()">
+          <ion-spinner slot="start" *ngIf="isSubmitting"></ion-spinner>
+          {{ isSubmitting ? 'Submitting...' : 'Submit Sales Entry' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</div>
+
+<ion-modal [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime
+      id="sales-entry-date-picker"
+      presentation="date"
+      [value]="form.eventDate"
+      [showDefaultButtons]="true"
+      doneText="Done"
+      cancelText="Cancel"
+      (ionChange)="updateEventDate($event)"
+    ></ion-datetime>
+  </ng-template>
+</ion-modal>

@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  googleSheetsWebhookUrl: 'REPLACE_ME',
+  googleSheetsSharedSecret: 'REPLACE_ME',
 };

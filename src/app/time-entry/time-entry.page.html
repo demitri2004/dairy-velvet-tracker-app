@@ -1,0 +1,98 @@
+<div class="page-content">
+  <div class="content-wrap">
+    <section class="hero-copy">
+      <p class="eyebrow">Dairy Velvet</p>
+      <h1>Log business time in a few taps.</h1>
+      <p class="supporting">
+        Capture production, market work, and admin hours now. The app will send each entry to your
+        Google Sheet as a new row.
+      </p>
+    </section>
+
+    <ion-card>
+      <ion-card-content>
+        <div class="form-grid">
+          <div class="field">
+            <label class="field-label" for="time-entry-date">Date</label>
+            <div class="date-control-wrap">
+              <ion-datetime-button datetime="time-entry-date-picker"></ion-datetime-button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="time-entry-type">Time Type</label>
+            <select
+              id="time-entry-type"
+              name="timeType"
+              class="field-control"
+              [(ngModel)]="form.timeType"
+              [disabled]="isSubmitting"
+            >
+              <option *ngFor="let type of timeTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+
+          <div class="field" *ngIf="isOtherSelected">
+            <label class="field-label" for="time-entry-type-other">Custom Time Type</label>
+            <input
+              id="time-entry-type-other"
+              name="timeTypeOther"
+              class="field-control"
+              type="text"
+              placeholder="Describe this work"
+              [(ngModel)]="form.timeTypeOther"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="time-entry-duration">Duration (minutes)</label>
+            <input
+              id="time-entry-duration"
+              name="durationMinutes"
+              class="field-control"
+              type="number"
+              min="1"
+              inputmode="numeric"
+              placeholder="e.g. 90"
+              [(ngModel)]="form.durationMinutes"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="time-entry-note">Note</label>
+            <textarea
+              id="time-entry-note"
+              name="note"
+              class="field-control field-control-textarea"
+              rows="4"
+              placeholder="Optional details"
+              [(ngModel)]="form.note"
+              [disabled]="isSubmitting"
+            ></textarea>
+          </div>
+        </div>
+
+        <ion-button expand="block" size="large" [disabled]="isSubmitting" (click)="submit()">
+          <ion-spinner slot="start" *ngIf="isSubmitting"></ion-spinner>
+          {{ isSubmitting ? 'Submitting...' : 'Submit Time Entry' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</div>
+
+<ion-modal [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime
+      id="time-entry-date-picker"
+      presentation="date"
+      [value]="form.entryDate"
+      [showDefaultButtons]="true"
+      doneText="Done"
+      cancelText="Cancel"
+      (ionChange)="updateEntryDate($event)"
+    ></ion-datetime>
+  </ng-template>
+</ion-modal>

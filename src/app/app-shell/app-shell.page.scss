@@ -1,0 +1,42 @@
+:host {
+  display: contents;
+}
+
+.bottom-toolbar {
+  --background: #fff9f2;
+  --padding-top: 0;
+  --padding-bottom: calc(env(safe-area-inset-bottom) + 1px);
+  border-top: 1px solid rgba(110, 86, 64, 0.12);
+  height: 70px;
+}
+
+.bottom-nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.nav-button {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 6px 8px 4px;
+  border: 0;
+  background: transparent;
+  color: #8e7358;
+  font: inherit;
+  cursor: pointer;
+}
+
+.nav-button ion-icon {
+  font-size: 1.2rem;
+}
+
+.nav-button span {
+  font-size: 0.78rem;
+  line-height: 1.1;
+}
+
+.nav-button.is-active {
+  color: #5f2f12;
+}

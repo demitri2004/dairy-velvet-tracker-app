@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <app-time-entry *ngIf="selectedTab === 'time'"></app-time-entry>
+  <app-sales-entry *ngIf="selectedTab === 'sales'"></app-sales-entry>
+  <app-placeholder *ngIf="selectedTab === 'tbd'"></app-placeholder>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="bottom-toolbar">
+    <div class="bottom-nav">
+      <button
+        type="button"
+        class="nav-button"
+        [class.is-active]="selectedTab === 'time'"
+        (click)="setTab('time')"
+      >
+        <ion-icon name="time-outline"></ion-icon>
+        <span>Time</span>
+      </button>
+
+      <button
+        type="button"
+        class="nav-button"
+        [class.is-active]="selectedTab === 'sales'"
+        (click)="setTab('sales')"
+      >
+        <ion-icon name="storefront-outline"></ion-icon>
+        <span>Sales</span>
+      </button>
+
+      <button
+        type="button"
+        class="nav-button"
+        [class.is-active]="selectedTab === 'tbd'"
+        (click)="setTab('tbd')"
+      >
+        <ion-icon name="layers-outline"></ion-icon>
+        <span>Batch</span>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-footer>
