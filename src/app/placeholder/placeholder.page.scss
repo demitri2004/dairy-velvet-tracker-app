@@ -38,6 +38,107 @@ ion-card {
   box-shadow: 0 10px 30px rgba(48, 22, 10, 0.08);
 }
 
+.scan-review {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(95, 47, 18, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 250, 246, 0.92);
+}
+
+.scan-review__header h2 {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  color: #30160a;
+}
+
+.scan-review__eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #8e7358;
+}
+
+.scan-review__image {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(95, 47, 18, 0.12);
+  object-fit: cover;
+  max-height: 220px;
+}
+
+.scan-review__section {
+  display: grid;
+  gap: 6px;
+}
+
+.scan-review__label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #8e7358;
+  text-transform: uppercase;
+}
+
+.scan-review__hint {
+  margin: 0;
+  color: #6e5643;
+  line-height: 1.4;
+}
+
+.scan-review__list {
+  margin: 0;
+  padding-left: 18px;
+  color: #51311f;
+}
+
+.scan-review__list--compact li + li {
+  margin-top: 2px;
+}
+
+.scan-review__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.scan-line-list {
+  display: grid;
+  gap: 10px;
+}
+
+.scan-line {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(95, 47, 18, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.scan-line__text {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid rgba(95, 47, 18, 0.14);
+  border-radius: 8px;
+  background: #fffdf9;
+  color: #30160a;
+  padding: 12px 14px;
+  font: inherit;
+  line-height: 1.35;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.scan-line__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .form-grid {
   display: grid;
   gap: 16px;
@@ -48,10 +149,29 @@ ion-card {
   gap: 8px;
 }
 
+.field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .field-label {
   font-size: 0.95rem;
   font-weight: 600;
   color: #51311f;
+}
+
+.field-scan-button {
+  margin: 0;
+  flex-shrink: 0;
+  --border-radius: 999px;
+  --border-color: rgba(95, 47, 18, 0.18);
+  --color: #5f2f12;
+  --background: #fffaf6;
+  --background-hover: rgba(95, 47, 18, 0.05);
+  --background-activated: rgba(95, 47, 18, 0.08);
+  --background-focused: rgba(95, 47, 18, 0.05);
 }
 
 .field-control {
@@ -79,9 +199,10 @@ ion-card {
   min-height: 112px;
 }
 
-ion-button {
+.submit-button {
   margin-top: 20px;
   --border-radius: 8px;
   --background: #5f2f12;
   --background-hover: #6d3716;
+  --color: #ffffff;
 }

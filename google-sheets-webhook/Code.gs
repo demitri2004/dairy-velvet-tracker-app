@@ -15,9 +15,10 @@ var TRACKER_HEADERS = {
     'event_date',
     'event_name',
     'event_name_other',
-    'total_sales',
     'cash_sales',
     'card_sales',
+    'venmo_sales',
+    'total_sales',
     'note',
     'source_app'
   ],

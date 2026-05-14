@@ -46,22 +46,6 @@
           </div>
 
           <div class="field">
-            <label class="field-label" for="sales-entry-total">Total Sales</label>
-            <input
-              id="sales-entry-total"
-              name="totalSales"
-              class="field-control"
-              type="number"
-              min="0"
-              step="0.01"
-              inputmode="decimal"
-              placeholder="0.00"
-              [(ngModel)]="form.totalSales"
-              [disabled]="isSubmitting"
-            />
-          </div>
-
-          <div class="field">
             <label class="field-label" for="sales-entry-cash">Cash Sales</label>
             <input
               id="sales-entry-cash"
@@ -90,6 +74,36 @@
               placeholder="Optional"
               [(ngModel)]="form.cardSales"
               [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sales-entry-venmo">Venmo Sales</label>
+            <input
+              id="sales-entry-venmo"
+              name="venmoSales"
+              class="field-control"
+              type="number"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="Optional"
+              [(ngModel)]="form.venmoSales"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sales-entry-total">Total Sales</label>
+            <input
+              id="sales-entry-total"
+              name="totalSales"
+              class="field-control field-control-calculated"
+              type="text"
+              inputmode="decimal"
+              [value]="totalSales | number:'1.2-2'"
+              readonly
+              disabled
             />
           </div>
 

@@ -2,12 +2,7 @@
 
 Tracked environment files use placeholders on purpose.
 
-Before running the app locally, put your real values into:
-
-- `src/environments/environment.ts`
-- `src/environments/environment.prod.ts`
-
-Optional local-only reference files are ignored by git:
+Local-only files are ignored by git:
 
 - `src/environments/environment.local.ts`
 - `src/environments/environment.prod.local.ts`

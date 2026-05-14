@@ -7,9 +7,9 @@ interface SalesEntryForm {
   eventDate: string;
   eventName: string;
   eventNameOther: string;
-  totalSales: number | null;
   cashSales: number | null;
   cardSales: number | null;
+  venmoSales: number | null;
   note: string;
 }
 
@@ -41,6 +41,14 @@ export class SalesEntryPage {
     return this.form.eventName === 'Other';
   }
 
+  get totalSales(): number {
+    const cashSales = this.form.cashSales ?? 0;
+    const cardSales = this.form.cardSales ?? 0;
+    const venmoSales = this.form.venmoSales ?? 0;
+
+    return Number((cashSales + cardSales + venmoSales).toFixed(2));
+  }
+
   updateEventDate(event: Event): void {
     const nextValue = this.normalizeDateValue((event as CustomEvent).detail?.value);
     if (nextValue) {
@@ -49,8 +57,8 @@ export class SalesEntryPage {
   }
 
   async submit(): Promise<void> {
-    if (!this.form.eventDate || !this.form.eventName || this.form.totalSales === null) {
-      await this.presentToast('Please fill in event date, event name, and total sales.', 'warning');
+    if (!this.form.eventDate || !this.form.eventName) {
+      await this.presentToast('Please fill in event date and event name.', 'warning');
       return;
     }
 
@@ -61,16 +69,7 @@ export class SalesEntryPage {
 
     const cashSales = this.form.cashSales ?? 0;
     const cardSales = this.form.cardSales ?? 0;
-
-    if (this.form.cashSales !== null && this.form.cardSales !== null) {
-      const totalPieces = Number((cashSales + cardSales).toFixed(2));
-      const enteredTotal = Number(this.form.totalSales.toFixed(2));
-
-      if (totalPieces !== enteredTotal) {
-        await this.presentToast('Cash plus card must equal total sales.', 'warning');
-        return;
-      }
-    }
+    const venmoSales = this.form.venmoSales ?? 0;
 
     const payload = {
       sheetName: 'Sales',
@@ -80,9 +79,10 @@ export class SalesEntryPage {
         event_date: this.form.eventDate,
         event_name: this.form.eventName,
         event_name_other: this.isOtherSelected ? this.form.eventNameOther.trim() : '',
-        total_sales: Number(this.form.totalSales.toFixed(2)),
+        total_sales: this.totalSales,
         cash_sales: this.form.cashSales === null ? null : Number(cashSales.toFixed(2)),
         card_sales: this.form.cardSales === null ? null : Number(cardSales.toFixed(2)),
+        venmo_sales: this.form.venmoSales === null ? null : Number(venmoSales.toFixed(2)),
         note: this.form.note.trim(),
         source_app: 'dairy-velvet-tracking-app',
       },
@@ -109,9 +109,9 @@ export class SalesEntryPage {
       eventDate: new Date().toISOString().slice(0, 10),
       eventName: 'Lansdale Market',
       eventNameOther: '',
-      totalSales: null,
       cashSales: null,
       cardSales: null,
+      venmoSales: null,
       note: '',
     };
   }

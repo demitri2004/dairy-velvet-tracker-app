@@ -4,19 +4,108 @@
       <p class="eyebrow">Production Inputs</p>
       <h1>Track each batch as you make it.</h1>
       <p class="supporting">
-        Enter the ingredient amounts for this production run. Later we can replace manual entry
-        with camera capture for labels and packaging.
+        Enter the ingredient amounts for this production run, or scan a label/photo and review the
+        detected values before applying them.
       </p>
       <p class="supporting" *ngIf="latestSavedBatchNumber">
-        Last saved batch in Drive: <strong>{{ latestSavedBatchNumber }}</strong>
+        Last saved batch on this device: <strong>{{ latestSavedBatchNumber }}</strong>
       </p>
     </section>
 
     <ion-card>
       <ion-card-content>
+        <div class="scan-review" *ngIf="scanReview">
+          <div class="scan-review__header">
+            <div>
+              <p class="scan-review__eyebrow">Review Scan</p>
+              <h2>Choose a detected line for the selected field.</h2>
+            </div>
+          </div>
+
+          <img
+            class="scan-review__image"
+            *ngIf="scanReview.imageUri"
+            [src]="scanReview.imageUri"
+            alt="Scanned batch source"
+          />
+
+          <div class="scan-review__section" *ngIf="scanReview.extractedBatchNumber">
+            <span class="scan-review__label">Detected Batch #</span>
+            <strong>{{ scanReview.extractedBatchNumber }}</strong>
+          </div>
+
+          <div class="scan-review__section" *ngIf="scanReview.barcodeValues.length">
+            <span class="scan-review__label">Detected Codes</span>
+            <ul class="scan-review__list">
+              <li *ngFor="let code of scanReview.barcodeValues">{{ code }}</li>
+            </ul>
+          </div>
+
+          <div
+            class="scan-review__section"
+            *ngIf="scanReview.extractedValues | keyvalue as detectedEntries"
+          >
+            <ng-container *ngIf="detectedEntries.length">
+              <span class="scan-review__label">Detected Ingredient Values</span>
+              <ul class="scan-review__list">
+                <li *ngFor="let entry of detectedEntries">
+                  {{ formatBatchFieldLabel(entry.key) }}: {{ entry.value }}
+                </li>
+              </ul>
+            </ng-container>
+          </div>
+
+          <div class="scan-review__section" *ngIf="scanReview.ocrLines.length">
+            <span class="scan-review__label">Raw OCR Text</span>
+            <p class="scan-review__hint" *ngIf="getFocusedFieldLabel() as focusedFieldLabel">
+              Selected input: <strong>{{ focusedFieldLabel }}</strong>
+            </p>
+            <p class="scan-review__hint" *ngIf="!focusedField">
+              Tap any Batch input first, then use a scanned line to place text into that field.
+            </p>
+
+            <div class="scan-line-list">
+              <div class="scan-line" *ngFor="let line of scanReview.ocrLines">
+                <textarea
+                  class="scan-line__text"
+                  readonly
+                  rows="1"
+                  [value]="line"
+                ></textarea>
+                <div class="scan-line__actions">
+                  <ion-button size="small" fill="outline" (click)="copyScanLine(line)">
+                    Copy
+                  </ion-button>
+                  <ion-button size="small" (click)="useScanLineInFocusedField(line)">
+                    Use in selected field
+                  </ion-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scan-review__actions">
+            <ion-button fill="clear" color="medium" (click)="dismissScanReview()">
+              Dismiss
+            </ion-button>
+          </div>
+        </div>
+
         <div class="form-grid">
           <div class="field">
-            <label class="field-label" for="batch-dv-number">DV Batch #</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-dv-number">DV Batch #</label>
+              <ion-button
+                size="small"
+                fill="outline"
+                class="field-scan-button"
+                [disabled]="isSubmitting || isScanning"
+                (click)="openScanOptions('dvBatchNumber')"
+              >
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'dvBatchNumber'"></ion-spinner>
+                {{ isScanning && focusedField === 'dvBatchNumber' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-dv-number"
               name="dvBatchNumber"
@@ -25,178 +114,240 @@
               placeholder="Batch identifier"
               [(ngModel)]="form.dvBatchNumber"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('dvBatchNumber')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-cheese">Cheese</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-cheese">Cheese</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('cheese')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'cheese'"></ion-spinner>
+                {{ isScanning && focusedField === 'cheese' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-cheese"
               name="cheese"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.cheese"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('cheese')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-butter">Butter</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-butter">Butter</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('butter')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'butter'"></ion-spinner>
+                {{ isScanning && focusedField === 'butter' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-butter"
               name="butter"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.butter"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('butter')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-sugar">Sugar</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-sugar">Sugar</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('sugar')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'sugar'"></ion-spinner>
+                {{ isScanning && focusedField === 'sugar' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-sugar"
               name="sugar"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.sugar"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('sugar')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-vanilla">Vanilla</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-vanilla">Vanilla</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('vanilla')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'vanilla'"></ion-spinner>
+                {{ isScanning && focusedField === 'vanilla' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-vanilla"
               name="vanilla"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.vanilla"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('vanilla')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-cocoa-powder">Cocoa Powder</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-cocoa-powder">Cocoa Powder</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('cocoaPowder')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'cocoaPowder'"></ion-spinner>
+                {{ isScanning && focusedField === 'cocoaPowder' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-cocoa-powder"
               name="cocoaPowder"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.cocoaPowder"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('cocoaPowder')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-coating-compound-chocolate"
-              >Coating Compound Chocolate</label
-            >
+            <div class="field-header">
+              <label class="field-label" for="batch-coating-compound-chocolate"
+                >Coating Compound Chocolate</label
+              >
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('coatingCompoundChocolate')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'coatingCompoundChocolate'"></ion-spinner>
+                {{ isScanning && focusedField === 'coatingCompoundChocolate' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-coating-compound-chocolate"
               name="coatingCompoundChocolate"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.coatingCompoundChocolate"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('coatingCompoundChocolate')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-coconut-oil">Coconut Oil</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-coconut-oil">Coconut Oil</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('coconutOil')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'coconutOil'"></ion-spinner>
+                {{ isScanning && focusedField === 'coconutOil' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-coconut-oil"
               name="coconutOil"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.coconutOil"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('coconutOil')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-milk">Milk</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-milk">Milk</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('milk')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'milk'"></ion-spinner>
+                {{ isScanning && focusedField === 'milk' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-milk"
               name="milk"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.milk"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('milk')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-lecithin">Lecithin</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-lecithin">Lecithin</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('lecithin')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'lecithin'"></ion-spinner>
+                {{ isScanning && focusedField === 'lecithin' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-lecithin"
               name="lecithin"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.lecithin"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('lecithin')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-salt">Salt</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-salt">Salt</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('salt')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'salt'"></ion-spinner>
+                {{ isScanning && focusedField === 'salt' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-salt"
               name="salt"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.salt"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('salt')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-other">Other</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-other">Other</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('other')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'other'"></ion-spinner>
+                {{ isScanning && focusedField === 'other' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <input
               id="batch-other"
               name="other"
               class="field-control"
-              type="number"
-              inputmode="decimal"
-              step="0.01"
-              placeholder="0"
+              type="text"
+              placeholder="Enter value"
               [(ngModel)]="form.other"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('other')"
             />
           </div>
 
           <div class="field">
-            <label class="field-label" for="batch-note">Note</label>
+            <div class="field-header">
+              <label class="field-label" for="batch-note">Note</label>
+              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('note')">
+                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'note'"></ion-spinner>
+                {{ isScanning && focusedField === 'note' ? 'Scanning...' : 'Scan' }}
+              </ion-button>
+            </div>
             <textarea
               id="batch-note"
               name="note"
@@ -205,11 +356,18 @@
               placeholder="Optional batch note"
               [(ngModel)]="form.note"
               [disabled]="isSubmitting"
+              (focus)="setFocusedField('note')"
             ></textarea>
           </div>
         </div>
 
-        <ion-button expand="block" size="large" [disabled]="isSubmitting" (click)="submit()">
+        <ion-button
+          expand="block"
+          size="large"
+          class="submit-button"
+          [disabled]="isSubmitting"
+          (click)="submit()"
+        >
           <ion-spinner slot="start" *ngIf="isSubmitting"></ion-spinner>
           {{ isSubmitting ? 'Submitting...' : 'Submit Batch Entry' }}
         </ion-button>
