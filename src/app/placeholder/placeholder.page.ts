@@ -13,6 +13,7 @@ import { TrackerSubmitService } from '../shared/tracker-submit.service';
 
 interface BatchForm {
   dvBatchNumber: string;
+  manufacturedDate: string;
   cheese: string;
   butter: string;
   sugar: string;
@@ -158,6 +159,10 @@ export class PlaceholderPage {
       return 'DV Batch #';
     }
 
+    if (this.focusedField === 'manufacturedDate') {
+      return 'Date';
+    }
+
     if (this.focusedField === 'cocoaPowder') {
       return 'Cocoa Powder';
     }
@@ -199,6 +204,13 @@ export class PlaceholderPage {
       return;
     }
 
+    if (this.focusedField === 'manufacturedDate') {
+      this.form.manufacturedDate = line.trim();
+      this.scanReview = null;
+      await this.presentToast('Inserted into Date.', 'success');
+      return;
+    }
+
     if (this.focusedField === 'note') {
       this.form.note = line.trim();
       this.scanReview = null;
@@ -218,6 +230,7 @@ export class PlaceholderPage {
       data: {
         submitted_at: new Date().toISOString(),
         dv_batch_number: this.form.dvBatchNumber.trim(),
+        manufactured_date: this.form.manufacturedDate.trim(),
         cheese: this.form.cheese,
         butter: this.form.butter,
         sugar: this.form.sugar,
@@ -420,6 +433,7 @@ export class PlaceholderPage {
   private createDefaultForm(): BatchForm {
     return {
       dvBatchNumber: '',
+      manufacturedDate: new Date().toISOString().slice(0, 10),
       cheese: '',
       butter: '',
       sugar: '',

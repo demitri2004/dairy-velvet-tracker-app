@@ -25,6 +25,7 @@ var TRACKER_HEADERS = {
   Batch: [
     'submitted_at',
     'dv_batch_number',
+    'manufactured_date',
     'cheese',
     'butter',
     'sugar',

@@ -24,6 +24,7 @@ export class SalesEntryPage {
     'Lansdale Market',
     'North Wales Market',
     'Horsham Market',
+    'Wholesale',
     'Demo / Pop-up',
     'Direct Order Pickup',
     'Other',

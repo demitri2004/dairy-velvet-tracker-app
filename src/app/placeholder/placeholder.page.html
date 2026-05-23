@@ -4,8 +4,7 @@
       <p class="eyebrow">Production Inputs</p>
       <h1>Track each batch as you make it.</h1>
       <p class="supporting">
-        Enter the ingredient amounts for this production run, or scan a label/photo and review the
-        detected values before applying them.
+        Track the batch number, manufactured date, and any notes for this production run.
       </p>
       <p class="supporting" *ngIf="latestSavedBatchNumber">
         Last saved batch on this device: <strong>{{ latestSavedBatchNumber }}</strong>
@@ -14,6 +13,7 @@
 
     <ion-card>
       <ion-card-content>
+        <!--
         <div class="scan-review" *ngIf="scanReview">
           <div class="scan-review__header">
             <div>
@@ -90,22 +90,11 @@
             </ion-button>
           </div>
         </div>
+        -->
 
         <div class="form-grid">
           <div class="field">
-            <div class="field-header">
-              <label class="field-label" for="batch-dv-number">DV Batch #</label>
-              <ion-button
-                size="small"
-                fill="outline"
-                class="field-scan-button"
-                [disabled]="isSubmitting || isScanning"
-                (click)="openScanOptions('dvBatchNumber')"
-              >
-                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'dvBatchNumber'"></ion-spinner>
-                {{ isScanning && focusedField === 'dvBatchNumber' ? 'Scanning...' : 'Scan' }}
-              </ion-button>
-            </div>
+            <label class="field-label" for="batch-dv-number">DV Batch #</label>
             <input
               id="batch-dv-number"
               name="dvBatchNumber"
@@ -118,6 +107,20 @@
             />
           </div>
 
+          <div class="field">
+            <label class="field-label" for="batch-manufactured-date">Date</label>
+            <input
+              id="batch-manufactured-date"
+              name="manufacturedDate"
+              class="field-control"
+              type="date"
+              [(ngModel)]="form.manufacturedDate"
+              [disabled]="isSubmitting"
+              (focus)="setFocusedField('manufacturedDate')"
+            />
+          </div>
+
+          <!--
           <div class="field">
             <div class="field-header">
               <label class="field-label" for="batch-cheese">Cheese</label>
@@ -339,15 +342,10 @@
               (focus)="setFocusedField('other')"
             />
           </div>
+          -->
 
           <div class="field">
-            <div class="field-header">
-              <label class="field-label" for="batch-note">Note</label>
-              <ion-button size="small" fill="outline" class="field-scan-button" [disabled]="isSubmitting || isScanning" (click)="openScanOptions('note')">
-                <ion-spinner slot="start" *ngIf="isScanning && focusedField === 'note'"></ion-spinner>
-                {{ isScanning && focusedField === 'note' ? 'Scanning...' : 'Scan' }}
-              </ion-button>
-            </div>
+            <label class="field-label" for="batch-note">Note</label>
             <textarea
               id="batch-note"
               name="note"
