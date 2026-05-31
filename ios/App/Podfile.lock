@@ -126,7 +126,7 @@ SPEC CHECKSUMS:
   CapacitorKeyboard: ad22f33de28070c8e16ecb119084af06915724e2
   CapacitorMlkitBarcodeScanning: b8b7b809bd651a5db9026973890e79472e6d58cb
   CapacitorStatusBar: b692a4cf12b3fe3a7b7ece86da62106065d78fdc
-  CordovaPluginsResources: e6e981aae7d2ca8251a5ad25f4e14f9d6c731188
+  CordovaPluginsResources: da93847212bf7b16ba770e4d6c3e7dba820174c7
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleMLKit: ddd51d7dff36ff28defa69afedd9cdce684fd857
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
@@ -142,4 +142,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9e45b8f115b8271b7b522f9541106bc02600afa9
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.16.2

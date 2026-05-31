@@ -100,6 +100,13 @@ export class PlaceholderPage {
     this.prefillFromLastSavedBatch();
   }
 
+  updateManufacturedDate(event: Event): void {
+    const nextValue = this.normalizeDateValue((event as CustomEvent).detail?.value);
+    if (nextValue) {
+      this.form.manufacturedDate = nextValue;
+    }
+  }
+
   async openScanOptions(field: FormFieldKey): Promise<void> {
     if (this.isSubmitting || this.isScanning) {
       return;
@@ -430,6 +437,14 @@ export class PlaceholderPage {
     return null;
   }
 
+  private normalizeDateValue(value: string | string[] | null | undefined): string {
+    if (!value) {
+      return '';
+    }
+    const raw = Array.isArray(value) ? value[0] : value;
+    return raw ? raw.slice(0, 10) : '';
+  }
+
   private createDefaultForm(): BatchForm {
     return {
       dvBatchNumber: '',
@@ -460,7 +475,7 @@ export class PlaceholderPage {
       const parsed = JSON.parse(savedValue) as BatchForm;
       this.form = {
         ...this.createDefaultForm(),
-        ...parsed,
+        dvBatchNumber: parsed.dvBatchNumber ?? '',
       };
       this.latestSavedBatchNumber =
         parsed.dvBatchNumber && parsed.dvBatchNumber.trim() ? parsed.dvBatchNumber.trim() : null;

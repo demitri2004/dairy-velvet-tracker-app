@@ -109,15 +109,9 @@
 
           <div class="field">
             <label class="field-label" for="batch-manufactured-date">Date</label>
-            <input
-              id="batch-manufactured-date"
-              name="manufacturedDate"
-              class="field-control"
-              type="date"
-              [(ngModel)]="form.manufacturedDate"
-              [disabled]="isSubmitting"
-              (focus)="setFocusedField('manufacturedDate')"
-            />
+            <div class="date-control-wrap">
+              <ion-datetime-button datetime="batch-manufactured-date-picker"></ion-datetime-button>
+            </div>
           </div>
 
           <!--
@@ -373,3 +367,17 @@
     </ion-card>
   </div>
 </div>
+
+<ion-modal [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime
+      id="batch-manufactured-date-picker"
+      presentation="date"
+      [value]="form.manufacturedDate"
+      [showDefaultButtons]="true"
+      doneText="Done"
+      cancelText="Cancel"
+      (ionChange)="updateManufacturedDate($event)"
+    ></ion-datetime>
+  </ng-template>
+</ion-modal>
