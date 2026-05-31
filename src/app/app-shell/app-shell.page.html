@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" auto-hide="false"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -8,6 +11,7 @@
   <app-time-entry *ngIf="selectedTab === 'time'"></app-time-entry>
   <app-sales-entry *ngIf="selectedTab === 'sales'"></app-sales-entry>
   <app-placeholder *ngIf="selectedTab === 'tbd'"></app-placeholder>
+  <app-miles-entry *ngIf="selectedTab === 'miles'"></app-miles-entry>
 </ion-content>
 
 <ion-footer>
@@ -41,6 +45,16 @@
       >
         <ion-icon name="layers-outline"></ion-icon>
         <span>Batch</span>
+      </button>
+
+      <button
+        type="button"
+        class="nav-button"
+        [class.is-active]="selectedTab === 'miles'"
+        (click)="setTab('miles')"
+      >
+        <ion-icon name="car-outline"></ion-icon>
+        <span>Miles</span>
       </button>
     </div>
   </ion-toolbar>

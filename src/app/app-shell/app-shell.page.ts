@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-type AppTab = 'time' | 'sales' | 'tbd';
+type AppTab = 'time' | 'sales' | 'tbd' | 'miles';
 
 @Component({
   selector: 'app-app-shell',
@@ -21,6 +21,8 @@ export class AppShellPage {
         return 'Sales Tracking';
       case 'tbd':
         return 'Batch Tracking';
+      case 'miles':
+        return 'Miles Tracking';
       case 'time':
       default:
         return 'Time Tracking';

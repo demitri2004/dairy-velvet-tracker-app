@@ -1,0 +1,194 @@
+<div class="page-content">
+  <div class="content-wrap">
+    <section class="hero-copy">
+      <p class="eyebrow">Trip & Mileage</p>
+      <h1>Log every business mile.</h1>
+      <p class="supporting">
+        Track trips, odometer readings, and reimbursable mileage — pushed straight to your Google Sheet.
+      </p>
+    </section>
+
+    <ion-card>
+      <ion-card-content>
+        <div class="form-grid">
+          <div class="field">
+            <label class="field-label" for="miles-entry-date">Trip Date</label>
+            <div class="date-control-wrap">
+              <ion-datetime-button datetime="miles-entry-date-picker"></ion-datetime-button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="miles-entry-trip-type">Trip Type</label>
+            <select
+              id="miles-entry-trip-type"
+              name="tripType"
+              class="field-control"
+              [(ngModel)]="form.tripType"
+              (ngModelChange)="onTripTypeChange($event)"
+              [disabled]="isSubmitting"
+            >
+              <option *ngFor="let tripType of tripTypes" [value]="tripType">{{ tripType }}</option>
+              <option value="__add_new__">+ Add new type</option>
+            </select>
+          </div>
+
+          <div class="field" *ngIf="addingNewTripType">
+            <label class="field-label" for="miles-entry-new-type">New Trip Type</label>
+            <div class="new-type-wrap">
+              <input
+                id="miles-entry-new-type"
+                name="newTripTypeName"
+                class="field-control"
+                type="text"
+                placeholder="Enter trip type name"
+                [(ngModel)]="newTripTypeName"
+                (keydown.enter)="confirmNewTripType()"
+                (keydown.escape)="cancelNewTripType()"
+                autofocus
+              />
+              <div class="new-type-actions">
+                <button type="button" class="type-action-btn type-action-confirm" (click)="confirmNewTripType()">Add</button>
+                <button type="button" class="type-action-btn type-action-cancel" (click)="cancelNewTripType()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="miles-entry-purpose">Purpose / Notes</label>
+            <select
+              *ngIf="isMarketSelected"
+              id="miles-entry-purpose"
+              name="purposeNotes"
+              class="field-control"
+              [(ngModel)]="form.purposeNotes"
+              [disabled]="isSubmitting"
+            >
+              <option value="">Select market</option>
+              <option *ngFor="let opt of marketPurposeOptions" [value]="opt">{{ opt }}</option>
+            </select>
+            <input
+              *ngIf="!isMarketSelected"
+              id="miles-entry-purpose"
+              name="purposeNotes"
+              class="field-control"
+              type="text"
+              placeholder="Optional"
+              [(ngModel)]="form.purposeNotes"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="miles-entry-from">From</label>
+            <input
+              id="miles-entry-from"
+              name="fromLocation"
+              class="field-control"
+              type="text"
+              placeholder="Starting location"
+              [(ngModel)]="form.fromLocation"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="miles-entry-to">To</label>
+            <input
+              id="miles-entry-to"
+              name="toLocation"
+              class="field-control"
+              type="text"
+              placeholder="Destination"
+              [(ngModel)]="form.toLocation"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="miles-entry-odometer-start">Odometer Start</label>
+            <input
+              id="miles-entry-odometer-start"
+              name="odometerStart"
+              class="field-control"
+              type="number"
+              min="0"
+              step="0.1"
+              inputmode="decimal"
+              placeholder="Optional"
+              [(ngModel)]="form.odometerStart"
+              (ngModelChange)="onOdometerChange()"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="miles-entry-odometer-end">Odometer End</label>
+            <input
+              id="miles-entry-odometer-end"
+              name="odometerEnd"
+              class="field-control"
+              type="number"
+              min="0"
+              step="0.1"
+              inputmode="decimal"
+              placeholder="Optional"
+              [(ngModel)]="form.odometerEnd"
+              (ngModelChange)="onOdometerChange()"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="miles-entry-driven">Miles Driven</label>
+            <input
+              id="miles-entry-driven"
+              name="milesDriven"
+              class="field-control"
+              type="number"
+              min="0"
+              step="0.1"
+              inputmode="decimal"
+              placeholder="Enter or calculated from odometer"
+              [(ngModel)]="form.milesDriven"
+              [disabled]="isSubmitting"
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="miles-entry-reimbursable">Reimbursable?</label>
+            <select
+              id="miles-entry-reimbursable"
+              name="reimbursable"
+              class="field-control"
+              [(ngModel)]="form.reimbursable"
+              [disabled]="isSubmitting"
+            >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+        </div>
+
+        <ion-button expand="block" size="large" [disabled]="isSubmitting" (click)="submit()">
+          <ion-spinner slot="start" *ngIf="isSubmitting"></ion-spinner>
+          {{ isSubmitting ? 'Submitting...' : 'Submit Miles Entry' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</div>
+
+<ion-modal [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime
+      id="miles-entry-date-picker"
+      presentation="date"
+      [value]="form.tripDate"
+      [showDefaultButtons]="true"
+      doneText="Done"
+      cancelText="Cancel"
+      (ionChange)="updateTripDate($event)"
+    ></ion-datetime>
+  </ng-template>
+</ion-modal>

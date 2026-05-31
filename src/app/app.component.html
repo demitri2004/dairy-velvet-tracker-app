@@ -1,3 +1,23 @@
 <ion-app>
-  <app-app-shell></app-app-shell>
+  <ion-menu side="end" menuId="main-menu" contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list lines="none">
+        <ion-item button detail="false" (click)="openAdmin()">
+          <ion-icon name="globe-outline" slot="start"></ion-icon>
+          Survey Admin
+        </ion-item>
+        <ion-item button detail="false" (click)="openSheets()">
+          <ion-icon name="grid-outline" slot="start"></ion-icon>
+          Tracker Sheet
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <app-app-shell id="main-content"></app-app-shell>
 </ion-app>

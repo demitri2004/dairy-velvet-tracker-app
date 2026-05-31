@@ -12,7 +12,7 @@
 
 .bottom-nav {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: stretch;
 }
 
@@ -39,4 +39,6 @@
 
 .nav-button.is-active {
   color: #5f2f12;
+  background: rgba(95, 47, 18, 0.07);
+  border-radius: 8px;
 }

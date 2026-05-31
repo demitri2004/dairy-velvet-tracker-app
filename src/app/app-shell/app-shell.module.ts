@@ -5,6 +5,7 @@ import { AppShellPage } from './app-shell.page';
 import { TimeEntryPageModule } from '../time-entry/time-entry.module';
 import { SalesEntryPageModule } from '../sales-entry/sales-entry.module';
 import { PlaceholderPageModule } from '../placeholder/placeholder.module';
+import { MilesEntryPageModule } from '../miles-entry/miles-entry.module';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { PlaceholderPageModule } from '../placeholder/placeholder.module';
     TimeEntryPageModule,
     SalesEntryPageModule,
     PlaceholderPageModule,
+    MilesEntryPageModule,
   ],
   declarations: [AppShellPage],
   exports: [AppShellPage],

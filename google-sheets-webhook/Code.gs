@@ -39,6 +39,19 @@ var TRACKER_HEADERS = {
     'other',
     'note',
     'source_app'
+  ],
+  Miles: [
+    'submitted_at',
+    'trip_date',
+    'trip_type',
+    'purpose_notes',
+    'from_location',
+    'to_location',
+    'odometer_start',
+    'odometer_end',
+    'miles_driven',
+    'reimbursable',
+    'source_app'
   ]
 };
 

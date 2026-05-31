@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 
 export interface TrackerPayload {
   sheetName: string;
-  entryType: 'time' | 'sales' | 'batch';
+  entryType: 'time' | 'sales' | 'batch' | 'miles';
   data: Record<string, string | number | null>;
 }
 
